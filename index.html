@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>코인 리서치 | Hilliard Buffshire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: rgba(201,168,76,0.15);
+    --accent: #e0526d;
+    --bg: #0d0d0f;
+    --bg2: #13131a;
+    --bg3: #1a1a26;
+    --text: #f0ead8;
+    --text-dim: #a09880;
+    --border: rgba(201,168,76,0.2);
+    --green: #4caf7a;
+    --amber: #e0a82e;
+    --orange: #e08a3c;
+    --red: #e0526d;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Noto Sans KR', 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 85% 90%, rgba(224,82,109,0.05) 0%, transparent 60%);
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 22px; position:relative; z-index:1; }
+
+  /* ── 헤더 ── */
+  header { text-align:center; padding: 44px 22px 18px; }
+  .backlink {
+    position:absolute; top:24px; left:24px; font-size:14px; color:var(--text-dim);
+    text-decoration:none; letter-spacing:.3px; transition:color .2s; font-weight:300;
+  }
+  .backlink:hover { color: var(--gold); }
+  .logo {
+    font-size:42px; line-height:1; margin-bottom:14px;
+    filter: drop-shadow(0 0 16px rgba(224,82,109,0.35));
+  }
+  h1.brand {
+    font-size:30px; font-weight:600; letter-spacing:.5px; color:var(--text);
+  }
+  h1.brand span { color: var(--gold); }
+  .subtitle {
+    font-size:15px; color:var(--text-dim); font-weight:300; margin-top:10px;
+    line-height:1.7; max-width:560px; margin-left:auto; margin-right:auto;
+  }
+  .divider { width:72px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:24px auto; }
+
+  /* ── 면책 배너 ── */
+  .disclaimer {
+    background: rgba(224,82,109,0.07); border:1px solid rgba(224,82,109,0.25);
+    border-radius:12px; padding:13px 18px; font-size:12.5px; color:var(--text-dim);
+    line-height:1.6; margin: 0 auto 26px; max-width:760px;
+  }
+  .disclaimer b { color:#e6889b; font-weight:500; }
+
+  /* ── 탭 ── */
+  .tabs { display:flex; gap:8px; justify-content:center; margin-bottom:26px; flex-wrap:wrap; }
+  .tab {
+    background:var(--bg2); border:1px solid var(--border); color:var(--text-dim);
+    padding:11px 22px; border-radius:10px; font-size:15px; cursor:pointer;
+    font-family:inherit; transition:all .2s; letter-spacing:.3px;
+  }
+  .tab:hover { color:var(--text); border-color:var(--gold); }
+  .tab.active { background:var(--gold-dim); color:var(--gold); border-color:var(--gold); font-weight:500; }
+  .panel { display:none; animation: fade .35s ease; padding-bottom:60px; }
+  .panel.active { display:block; }
+  @keyframes fade { from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+
+  /* ── 스크리너 ── */
+  .coin-input-row { display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap; }
+  .coin-input-row input {
+    flex:1; min-width:200px; background:var(--bg2); border:1px solid var(--border);
+    border-radius:10px; padding:13px 16px; color:var(--text); font-size:15px; font-family:inherit;
+  }
+  .coin-input-row input:focus { outline:none; border-color:var(--gold); }
+
+  .cat { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:20px 22px; margin-bottom:14px; }
+  .cat-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px; }
+  .cat-title { font-size:17px; font-weight:500; color:var(--gold-light); }
+  .cat-sub { font-size:13px; color:var(--text-dim); }
+  .item { display:flex; align-items:flex-start; gap:11px; padding:9px 0; border-top:1px solid rgba(201,168,76,0.08); cursor:pointer; }
+  .item:first-of-type { border-top:none; }
+  .item input[type=checkbox] { appearance:none; width:19px; height:19px; min-width:19px; margin-top:1px;
+    border:1.5px solid var(--text-dim); border-radius:5px; cursor:pointer; position:relative; transition:all .15s; }
+  .item input[type=checkbox]:checked { background:var(--accent); border-color:var(--accent); }
+  .item input[type=checkbox]:checked::after { content:'✓'; position:absolute; color:#fff; font-size:13px; left:3px; top:-1px; }
+  .item-label { font-size:14.5px; line-height:1.5; color:var(--text); flex:1; }
+  .item-pts { font-size:13px; color:var(--text-dim); font-variant-numeric:tabular-nums; white-space:nowrap; font-weight:500; }
+  .item input:checked ~ .item-pts { color:var(--accent); }
+
+  /* ── 결과 패널 ── */
+  .result-box {
+    position:sticky; bottom:14px; margin-top:20px; background:var(--bg3);
+    border:1px solid var(--gold); border-radius:14px; padding:18px 22px;
+    box-shadow:0 12px 40px rgba(0,0,0,.55);
+  }
+  .result-top { display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; }
+  .result-score { font-size:15px; color:var(--text-dim); }
+  .result-score b { font-size:30px; color:var(--text); font-variant-numeric:tabular-nums; }
+  .grade-badge { font-size:17px; font-weight:600; padding:7px 16px; border-radius:10px; }
+  .meter { height:9px; background:rgba(255,255,255,.06); border-radius:6px; margin-top:14px; overflow:hidden; }
+  .meter-fill { height:100%; width:0; border-radius:6px; transition:width .3s ease, background .3s ease; }
+  .result-actions { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+  .btn { background:var(--gold-dim); border:1px solid var(--gold); color:var(--gold); padding:9px 16px;
+    border-radius:9px; font-size:13.5px; cursor:pointer; font-family:inherit; transition:all .2s; }
+  .btn:hover { background:var(--gold); color:#1a1a14; }
+  .btn.ghost { background:transparent; border-color:var(--border); color:var(--text-dim); }
+  .btn.ghost:hover { border-color:var(--text-dim); color:var(--text); background:transparent; }
+
+  /* ── 도구 링크 ── */
+  .tools { margin-top:26px; }
+  .tools h3 { font-size:14px; color:var(--text-dim); font-weight:400; margin-bottom:12px; letter-spacing:.5px; }
+  .tool-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:9px; }
+  .tool-grid a {
+    background:var(--bg2); border:1px solid var(--border); border-radius:9px; padding:11px 13px;
+    text-decoration:none; color:var(--text); font-size:13px; transition:all .2s; display:block;
+  }
+  .tool-grid a:hover { border-color:var(--gold); transform:translateY(-2px); }
+  .tool-grid a span { display:block; color:var(--text-dim); font-size:11px; margin-top:3px; }
+
+  /* ── 아카이브 ── */
+  .arch-filter { width:100%; background:var(--bg2); border:1px solid var(--border); border-radius:10px;
+    padding:12px 16px; color:var(--text); font-size:14px; font-family:inherit; margin-bottom:18px; }
+  .arch-filter:focus { outline:none; border-color:var(--gold); }
+  .report-card {
+    background:var(--bg2); border:1px solid var(--border); border-radius:13px; padding:20px 22px;
+    margin-bottom:13px; cursor:pointer; transition:all .2s; position:relative; overflow:hidden;
+  }
+  .report-card::after { content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,transparent,var(--accent),transparent); opacity:0; transition:opacity .3s; }
+  .report-card:hover { transform:translateY(-3px); border-color:var(--gold); }
+  .report-card:hover::after { opacity:1; }
+  .rc-date { font-size:12px; color:var(--accent); letter-spacing:.5px; font-weight:500; }
+  .rc-title { font-size:19px; font-weight:500; margin:6px 0 8px; color:var(--text); line-height:1.3; }
+  .rc-summary { font-size:14px; color:var(--text-dim); line-height:1.6; }
+  .rc-tags { margin-top:11px; display:flex; gap:6px; flex-wrap:wrap; }
+  .rc-tag { font-size:11px; color:var(--gold); background:var(--gold-dim); padding:3px 9px; border-radius:20px; }
+  .arch-empty { text-align:center; color:var(--text-dim); padding:40px; font-size:14px; }
+
+  /* ── 리포트 뷰어 ── */
+  #reader { display:none; }
+  .reader-bar { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+  .md-body { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:30px 32px; line-height:1.75; font-size:15px; }
+  .md-body h1 { font-size:26px; margin:6px 0 18px; color:var(--gold-light); font-weight:600; line-height:1.3; }
+  .md-body h2 { font-size:20px; margin:30px 0 12px; color:var(--gold); font-weight:500; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .md-body h3 { font-size:16.5px; margin:22px 0 9px; color:var(--gold-light); font-weight:500; }
+  .md-body h4 { font-size:15px; margin:16px 0 6px; color:var(--text); font-weight:600; }
+  .md-body p { margin:10px 0; color:var(--text); }
+  .md-body ul, .md-body ol { margin:10px 0 10px 22px; }
+  .md-body li { margin:5px 0; }
+  .md-body strong { color:var(--gold-light); font-weight:600; }
+  .md-body code { background:var(--bg3); padding:2px 6px; border-radius:5px; font-size:13px; color:#e6c98a; }
+  .md-body a { color:var(--accent); }
+  .md-body blockquote { border-left:3px solid var(--gold); background:var(--gold-dim); padding:10px 16px; margin:14px 0; border-radius:0 8px 8px 0; color:var(--text-dim); }
+  .md-body blockquote p { color:var(--text-dim); margin:5px 0; }
+  .md-body table { border-collapse:collapse; width:100%; margin:16px 0; font-size:13px; display:block; overflow-x:auto; }
+  .md-body th, .md-body td { border:1px solid var(--border); padding:8px 11px; text-align:left; vertical-align:top; }
+  .md-body th { background:var(--gold-dim); color:var(--gold-light); font-weight:500; white-space:nowrap; }
+  .md-body tr:nth-child(even) td { background:rgba(255,255,255,0.015); }
+  .md-body hr { border:none; border-top:1px solid var(--border); margin:24px 0; }
+
+  footer { text-align:center; padding:28px 22px; border-top:1px solid var(--border); color:var(--text-dim); font-size:12px; letter-spacing:.4px; }
+  footer .cross-small { color:var(--gold); margin:0 5px; }
+
+  @media (max-width:560px){
+    h1.brand{font-size:25px;} .md-body{padding:22px 18px;} .backlink{position:static; display:inline-block; margin-bottom:14px;}
+    header{padding-top:24px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="backlink" href="https://hilliardbuffshire.github.io/hilliard-hub/">← 허브로</a>
+  <header>
+    <div class="logo">🔍</div>
+    <h1 class="brand">코인 <span>리서치</span></h1>
+    <p class="subtitle">알트코인 급락·러그풀 <b>전조증상</b>을 과거 사례 기반 100점 체크리스트로 채점하고, 리서치 기록을 아카이브로 보관합니다.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <div class="disclaimer">
+    <b>⚠️ 이것은 투자 권유·가격 예측이 아닙니다.</b> 사기 회피·리스크 진단용 도구입니다. 높은 점수는 "추가 검증이 필요한 구조적 위험(레드플래그)"을 뜻하며 특정 프로젝트를 사기로 단정하지 않습니다. 공개 예정된 토큰 언락 등은 사실상의 이벤트 리스크이며 팀의 사기 여부와 무관합니다.
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="screener">📊 리스크 스크리너</button>
+    <button class="tab" data-tab="archive">📚 리서치 아카이브</button>
+  </div>
+
+  <!-- ───────── 스크리너 ───────── -->
+  <section class="panel active" id="screener">
+    <div class="coin-input-row">
+      <input id="coinName" type="text" placeholder="종목명/티커 입력 (예: ABC) — 결과 복사 시 함께 기록됩니다">
+    </div>
+
+    <!-- 카테고리는 JS로 렌더링 -->
+    <div id="cats"></div>
+
+    <div class="result-box">
+      <div class="result-top">
+        <div class="result-score">위험 점수 <b id="scoreNum">0</b> <span style="font-size:14px;color:var(--text-dim)">/ 100</span></div>
+        <div class="grade-badge" id="gradeBadge" style="background:rgba(76,175,122,.15); color:var(--green)">🟢 낮음</div>
+      </div>
+      <div class="meter"><div class="meter-fill" id="meterFill" style="background:var(--green)"></div></div>
+      <div class="result-actions">
+        <button class="btn" id="copyBtn">📋 결과 복사 (기록용)</button>
+        <button class="btn ghost" id="resetBtn">초기화</button>
+      </div>
+    </div>
+
+    <div class="tools">
+      <h3>🔧 데이터 확인 도구 (체크 전 여기서 수치를 확인하세요)</h3>
+      <div class="tool-grid">
+        <a href="https://rugcheck.xyz/" target="_blank" rel="noopener">RugCheck<span>솔라나 · mint/freeze/LP</span></a>
+        <a href="https://tokensniffer.com/" target="_blank" rel="noopener">TokenSniffer<span>EVM 컨트랙트 점수</span></a>
+        <a href="https://gopluslabs.io/" target="_blank" rel="noopener">GoPlus Security<span>토큰 보안 API</span></a>
+        <a href="https://honeypot.is/" target="_blank" rel="noopener">Honeypot.is<span>허니팟·매도세</span></a>
+        <a href="https://de.fi/scanner" target="_blank" rel="noopener">De.Fi Scanner<span>컨트랙트 감사</span></a>
+        <a href="https://tokenomist.ai/" target="_blank" rel="noopener">Tokenomist<span>언락 일정</span></a>
+        <a href="https://cryptorank.io/token-unlock" target="_blank" rel="noopener">Cryptorank<span>베스팅·언락</span></a>
+        <a href="https://intel.arkm.com/" target="_blank" rel="noopener">Arkham<span>고래·지갑 추적</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── 아카이브 ───────── -->
+  <section class="panel" id="archive">
+    <div id="archList">
+      <input class="arch-filter" id="archFilter" type="text" placeholder="제목·태그로 검색…">
+      <div id="reportList"></div>
+    </div>
+    <div id="reader">
+      <div class="reader-bar">
+        <button class="btn ghost" id="backToList">← 목록</button>
+        <span style="font-size:13px;color:var(--text-dim)" id="readerMeta"></span>
+      </div>
+      <div class="md-body" id="mdBody"></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <p>코인 리서치 <span class="cross-small">✝</span> Hilliard Buffshire One Stop Shop · 교육·리스크 진단 목적, 투자 자문 아님</p>
+</footer>
+
+<!-- ═══════════ 리서치 리포트 (마크다운 임베드) ═══════════ -->
+<!-- 새 리포트 추가: 아래와 같은 script 블록을 복사해 raw 마크다운으로 채우면 아카이브에 자동 표시됩니다. -->
+<script type="text/markdown"
+  data-id="2026-06-02-altcoin-rugpull-framework"
+  data-title="알트코인 급락·러그풀 전조증상 프레임워크 (2023~2026)"
+  data-date="2026-06-02"
+  data-tags="러그풀,프레임워크,스코어카드,사례연구">
+# 알트코인 급락·러그풀 전조증상 프레임워크 (2023~2026)
+
+> **목적:** 과거 급락/러그풀 사례 → 공통 패턴 → 전조증상 기준(스코어카드) → 현재 시장 적용
+>
+> **⚠️ 면책:** 사기 회피·투자자 보호용 리스크 진단 도구입니다. 투자 권유·가격 예측이 아니며, 높은 점수는 "추가 검증 필요(레드플래그)"이지 "사기 확정"이 아닙니다. 공개 예정 언락 등은 사실(fact)인 이벤트 리스크이며 팀의 사기 여부와 무관합니다.
+
+## Phase 1 — 최근 3년 주요 급락/러그풀 사례
+
+**시장 규모:** 2024년 밈코인 러그풀·사기 손실 $500M+ → 2025년 러그풀만 $2.8B~전체 웹3 손실 $6B(DappRadar), 전체 크립토 사기·도난 $17B로 폭증. 특히 **솔라나 pump.fun 출시 토큰의 98.6%가 러그풀/조작성**으로 분류됐고, 트렌드가 2024년 DeFi/NFT 러그 → 2025~26년 **밈코인 펌프&덤프**로 이동.
+
+| 사례 | 시기 | 유형 | 낙폭/손실 | 핵심 수법·전조 |
+|------|------|------|-----------|----------------|
+| Terra LUNA/UST *(기준점)* | 2022.05 | 알고리즘 데스스파이럴 | ~$40B+ | 무담보 페그, Anchor 20% 비현실 APY |
+| FTX/FTT *(기준점)* | 2022.11 | CEX 부실·자전담보 | 고객자금 ~$8B | 자체토큰 담보, 불투명 관계사 |
+| Froggy | 2024 초 | 하드 러그 | — | LP 미잠금, 익명팀, 유동성 제거 |
+| Sharpei (SHAR) | 2024.10 | 인플루언서 펌프 | $54M 시총 | X 인플루언서 동원 |
+| **Hawk Tuah (HAWK)** | 2024.12 | 인사이더 덤프·저유통 | $490M→ -90%/수시간 | 공개물량 3~4%, 10개 지갑 집중, 상장직후 덤프 |
+| Safuu | 2024 | 리베이스 폰지 | $50M | 비현실 APY, 유동성 급제거 |
+| **LIBRA** | 2025.02 | 셀럽 펌프&덤프 | 인사이더 $100M+ | 아르헨 대통령 Milei 홍보, Meteora 연루 |
+| **Mantra (OM)** | 2025.04 | 집중+저유동성+강제청산 | **$6B+ / -90%/수분** | 17개 지갑이 43.6M OM($227M) 거래소 이동, 일요일 저유동성, Bybit 청산 연쇄 |
+| MetaYield Farm | 2025 | 일드 엑시트스캠 | $290M/14,000명+ | 비현실 수익 후 잠적 |
+| **CATFI (한국)** | 2026.05 | 자전거래 펌프&덤프 | 256명 9억원 손실 | 가짜 인플루언서 'Eth Father', 워시트레이딩, 26시간 +1,001배. 한국 첫 DEX 형사기소 |
+
+**급락 유형 분류:** ① 하드 러그(유동성 인출/악성 컨트랙트) ② 인사이더 덤프·펌프&덤프(저유통·집중) ③ 소프트 러그(서서히 매도·방치) ④ 폰지/일드 붕괴(비현실 APY) ⑤ 토크노믹스 언락 캐스케이드(예정된 대량 해제+얇은 유동성) ⑥ 데스스파이럴/디페그 ⑦ CEX/카운터파티 부실.
+
+## Phase 2 — 공통점 → 전조증상 스코어카드(100점)
+
+**6대 공통 패턴:** ⓐ물량 집중·저유통 ⓑ유동성 통제 부재(LP 미잠금) ⓒ컨트랙트 권한(mint/freeze/허니팟) ⓓ인위적 수요(워시트레이딩·셀럽펌프) ⓔ비현실 수익·불투명 ⓕ구조적 공급충격(언락 클리프).
+
+| 카테고리 | 배점 | 핵심 항목 |
+|----------|------|-----------|
+| A. 분배·집중도 | 25 | 상위1지갑>10%(+8), 상위10>35~40%(+7), float<15%(+6), 번들지갑(+4) |
+| B. 유동성·컨트랙트 | 25 | LP미잠금(+9), mint권한(+6), freeze/blacklist(+4), 허니팟(+4), 가짜renounce(+2) |
+| C. 팀·투명성 | 15 | 익명·이력없음(+6), 무감사(+3), 문서복제(+3), 셀럽의존(+3) |
+| D. 토크노믹스·언락 | 20 | 30일내 대형 클리프(+8), 팀/VC>40%(+5), FDV≫시총(+4), "보장"APY(+3) |
+| E. 거래 행태 | 15 | 워시/봇거래(+5), 출시직후 비정상급등(+4), 얇은유동성+고레버리지(+4), 소셜 급침묵(+2) |
+
+**위험 등급:** 🟢 0–25 낮음 · 🟡 26–50 보통(비중축소) · 🟠 51–75 높음(진입회피) · 🔴 76–100 극단(회피).
+
+> 👉 **'리스크 스크리너' 탭에서 이 100점 기준으로 아무 코인이나 직접 채점**할 수 있습니다.
+
+## Phase 3 — 현재 시장 적용 (2026년 6월 기준)
+
+**거시 = 급락 증폭 국면:** BTC가 ATH 대비 -47%(2026.03), 알트 거래량 전고점 대비 -80%, 2026년 3월 한 달 $6B+ 언락(평균 3배). 같은 악재도 약세장·얇은 유동성에서 **훨씬 큰 낙폭**(Mantra형 캐스케이드의 토양).
+
+**고위험 카테고리(구조적으로 스코어카드 고득점 그룹):**
+
+1. **신규 밈코인(pump.fun·솔라나 런치패드)** — 통계상 98.6% 러그/조작. A·B·C·E 거의 자동 고득점.
+2. **저유통·고FDV 'VC 코인' 중 언락 임박** — *공개 예정된 사실상의 이벤트 리스크(사기 아님):* HYPE(2026.06.06 코어기여자 클리프), HUMA(유통 -26.5% 1회 해제), OP·ZRO·ENA·RED·WBT 등 상반기 대형 해제. 약세장에서 단기 급락 트리거 가능.
+3. **셀럽/인플루언서 토큰**(LIBRA·Sharpei형) — C·E 고득점.
+4. **고APY DeFi/RWA 일드 상품**(Safuu·MetaYield형) — "보장 수익" 구조 = D·E 위험.
+5. **약세장+고레버리지+얇은 유동성 종목**(Mantra형) — 주말/저유동성 시간대 강제청산 취약.
+
+> **왜 특정 코인 명단을 만들지 않는가:** 근거 없는 단정은 부당(명예훼손 소지)하고 신뢰성도 없기 때문. 대신 위 객관적 기준으로 **본인 보유/관심 종목을 직접 채점**하는 것이 올바른 사용법입니다.
+
+## 실전 스크리닝 절차
+
+1. **컨트랙트/허니팟 스캔** — EVM: TokenSniffer·GoPlus·Honeypot.is·De.Fi / 솔라나: RugCheck
+2. **보유 분포·고래 추적** — RugCheck/TokenSniffer 홀더 탭, Arkham
+3. **유동성 잠금** — LP 소각(dead address)=최상, 배포자 지갑 보관=레드플래그
+4. **언락 일정** — Tokenomist, Cryptorank (30일 내 클리프 여부)
+5. **스크리너 탭에서 5개 카테고리 채점 → 등급 산출**
+
+---
+
+*출처: AInvest·CoinDesk·Solidus Labs·The Defiant·CCN·Koinly·Bitcoin.com·CryptoTimes·CoinGabbar·KuCoin·CoinGecko·DEXTools·arXiv(LROO)·TokenSniffer·RugCheck. 수치는 보고서별 정의(러그풀만 vs 전체 사기) 차이로 상이할 수 있음.*
+</script>
+
+<script>
+/* ═══════════ 스코어카드 정의 ═══════════ */
+const CATS = [
+  { key:'A', title:'A. 토큰 분배 & 보유 집중도', sub:'/ 25점', items:[
+    ['상위 1개 지갑이 유통량 >10% (또는 배포자·팀 지갑 다량 보유)', 8],
+    ['상위 10개 지갑 합계 >35~40%', 7],
+    ['공개 유통물량(float) <15% — 저유통·고FDV', 6],
+    ['다수 보유 지갑이 동시 생성/유사 펀딩 (번들·인사이더 정황)', 4],
+  ]},
+  { key:'B', title:'B. 유동성 & 컨트랙트 권한', sub:'/ 25점', items:[
+    ['LP 미잠금/미소각 — 배포자가 유동성 인출 가능', 9],
+    ['mint(추가발행) 권한 미포기', 6],
+    ['freeze/blacklist 권한 존재 (솔라나 freeze authority 등)', 4],
+    ['허니팟: 매도 시뮬 실패 또는 매도세 >10%', 4],
+    ['미검증 컨트랙트 / 가짜 ownership renounce / 숨은 수수료', 2],
+  ]},
+  { key:'C', title:'C. 팀 & 투명성', sub:'/ 15점', items:[
+    ['완전 익명 — 출시 前 검증 가능한 이력·기여 없음', 6],
+    ['감사(audit) 없음 또는 무명 감사', 3],
+    ['로드맵 모호 / 문서 복제 / 깃허브·실제 제품 부재', 3],
+    ['셀럽·인플루언서 의존 마케팅 (유료 홍보)', 3],
+  ]},
+  { key:'D', title:'D. 토크노믹스 & 언락', sub:'/ 20점', items:[
+    ['30일 내 대형 클리프 언락 (유통량 대비 큰 비중)', 8],
+    ['팀/VC/프라이빗 비중 과다(>40%)·짧은 베스팅', 5],
+    ['FDV ≫ 시총 (괴리 큼), 시총 대비 거래량 과소', 4],
+    ['비현실적 "보장" 수익률 / 리베이스·무한발행 구조', 3],
+  ]},
+  { key:'E', title:'E. 시장·거래 행태', sub:'/ 15점', items:[
+    ['워시트레이딩·좁은 시간대 봇성 거래·자전매매 정황', 5],
+    ['출시 직후 비정상 급등 (수시간 수백~수천 %)', 4],
+    ['유동성 얇음(소량 매도에 큰 슬리피지) + 거래소 고레버리지', 4],
+    ['소셜 급팽창 후 갑작스런 침묵 / 채널 삭제', 2],
+  ]},
+];
+
+/* ── 스크리너 렌더 ── */
+const catsEl = document.getElementById('cats');
+CATS.forEach(cat => {
+  const box = document.createElement('div');
+  box.className = 'cat';
+  box.innerHTML = `<div class="cat-head"><span class="cat-title">${cat.title}</span><span class="cat-sub">${cat.sub}</span></div>`;
+  cat.items.forEach(([label, pts]) => {
+    const row = document.createElement('label');
+    row.className = 'item';
+    row.innerHTML = `<input type="checkbox" data-pts="${pts}">
+      <span class="item-label">${label}</span>
+      <span class="item-pts">+${pts}</span>`;
+    box.appendChild(row);
+  });
+  catsEl.appendChild(box);
+});
+
+const GRADES = [
+  { max:25,  label:'🟢 낮음',  color:'var(--green)',  bg:'rgba(76,175,122,.15)' },
+  { max:50,  label:'🟡 보통',  color:'var(--amber)',  bg:'rgba(224,168,46,.15)' },
+  { max:75,  label:'🟠 높음',  color:'var(--orange)', bg:'rgba(224,138,60,.15)' },
+  { max:100, label:'🔴 극단',  color:'var(--red)',    bg:'rgba(224,82,109,.15)' },
+];
+function gradeFor(s){ return GRADES.find(g => s <= g.max) || GRADES[GRADES.length-1]; }
+
+const scoreNum = document.getElementById('scoreNum');
+const gradeBadge = document.getElementById('gradeBadge');
+const meterFill = document.getElementById('meterFill');
+
+function recalc(){
+  let total = 0;
+  document.querySelectorAll('#cats input:checked').forEach(c => total += +c.dataset.pts);
+  const g = gradeFor(total);
+  scoreNum.textContent = total;
+  gradeBadge.textContent = g.label;
+  gradeBadge.style.color = g.color;
+  gradeBadge.style.background = g.bg;
+  meterFill.style.width = total + '%';
+  meterFill.style.background = g.color;
+}
+catsEl.addEventListener('change', recalc);
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.querySelectorAll('#cats input:checked').forEach(c => c.checked = false);
+  document.getElementById('coinName').value = '';
+  recalc();
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const name = document.getElementById('coinName').value.trim() || '(미입력)';
+  let total = 0; const checked = [];
+  document.querySelectorAll('#cats .item').forEach(item => {
+    const cb = item.querySelector('input');
+    if (cb.checked){ total += +cb.dataset.pts; checked.push('  - ' + item.querySelector('.item-label').textContent + ' (+' + cb.dataset.pts + ')'); }
+  });
+  const g = gradeFor(total);
+  const today = new Date().toISOString().slice(0,10);
+  const text = `[코인 리서치 스크리너] ${name}\n날짜: ${today}\n위험 점수: ${total}/100  →  ${g.label}\n해당 레드플래그:\n${checked.length ? checked.join('\n') : '  - 없음'}\n\n※ 리스크 진단용, 투자 자문 아님.`;
+  navigator.clipboard.writeText(text).then(() => {
+    const b = document.getElementById('copyBtn');
+    const o = b.textContent; b.textContent = '✓ 복사됨!';
+    setTimeout(() => b.textContent = o, 1600);
+  }).catch(() => alert(text));
+});
+
+/* ═══════════ 탭 전환 ═══════════ */
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById(t.dataset.tab).classList.add('active');
+}));
+
+/* ═══════════ 아카이브 ═══════════ */
+const REPORTS = [...document.querySelectorAll('script[type="text/markdown"]')].map(s => ({
+  id: s.dataset.id,
+  title: s.dataset.title,
+  date: s.dataset.date,
+  tags: (s.dataset.tags || '').split(',').map(x => x.trim()).filter(Boolean),
+  md: s.textContent.trim(),
+})).sort((a,b) => b.date.localeCompare(a.date));
+
+function summarize(md){
+  const lines = md.split('\n').map(l => l.trim());
+  for (const l of lines){
+    if (l && !l.startsWith('#') && !l.startsWith('>')) return l.replace(/[*_`#]/g,'').slice(0,140);
+  }
+  return '';
+}
+
+const reportList = document.getElementById('reportList');
+function renderList(filter=''){
+  const f = filter.toLowerCase();
+  const items = REPORTS.filter(r =>
+    r.title.toLowerCase().includes(f) || r.tags.join(' ').toLowerCase().includes(f));
+  if (!items.length){ reportList.innerHTML = '<div class="arch-empty">검색 결과가 없습니다.</div>'; return; }
+  reportList.innerHTML = items.map(r => `
+    <div class="report-card" data-id="${r.id}">
+      <div class="rc-date">${r.date}</div>
+      <div class="rc-title">${r.title}</div>
+      <div class="rc-summary">${summarize(r.md)}</div>
+      <div class="rc-tags">${r.tags.map(t => `<span class="rc-tag">#${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+renderList();
+
+document.getElementById('archFilter').addEventListener('input', e => renderList(e.target.value));
+
+const archList = document.getElementById('archList');
+const reader = document.getElementById('reader');
+const mdBody = document.getElementById('mdBody');
+const readerMeta = document.getElementById('readerMeta');
+
+reportList.addEventListener('click', e => {
+  const card = e.target.closest('.report-card');
+  if (!card) return;
+  const r = REPORTS.find(x => x.id === card.dataset.id);
+  if (!r) return;
+  mdBody.innerHTML = (window.marked ? marked.parse(r.md) : '<pre>' + r.md.replace(/</g,'&lt;') + '</pre>');
+  readerMeta.textContent = `${r.date} · #${r.tags.join(' #')}`;
+  archList.style.display = 'none';
+  reader.style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+document.getElementById('backToList').addEventListener('click', () => {
+  reader.style.display = 'none';
+  archList.style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+</script>
+</body>
+</html>
