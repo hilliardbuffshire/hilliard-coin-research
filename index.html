@@ -202,12 +202,12 @@
   </div>
 
   <div class="tabs">
-    <button class="tab active" data-tab="screener">📊 리스크 스크리너</button>
-    <button class="tab" data-tab="archive">📚 리서치 아카이브</button>
+    <button class="tab active" data-tab="archive">📚 위험 리스트 (워치리스트)</button>
+    <button class="tab" data-tab="screener">📊 리스크 스크리너 (직접 채점)</button>
   </div>
 
   <!-- ───────── 스크리너 ───────── -->
-  <section class="panel active" id="screener">
+  <section class="panel" id="screener">
     <div class="coin-input-row">
       <input id="coinName" type="text" placeholder="종목명/티커 입력 (예: ABC) — 결과 복사 시 함께 기록됩니다">
     </div>
@@ -243,7 +243,7 @@
   </section>
 
   <!-- ───────── 아카이브 ───────── -->
-  <section class="panel" id="archive">
+  <section class="panel active" id="archive">
     <div id="archList">
       <input class="arch-filter" id="archFilter" type="text" placeholder="제목·태그로 검색…">
       <div id="reportList"></div>
@@ -264,6 +264,59 @@
 
 <!-- ═══════════ 리서치 리포트 (마크다운 임베드) ═══════════ -->
 <!-- 새 리포트 추가: 아래와 같은 script 블록을 복사해 raw 마크다운으로 채우면 아카이브에 자동 표시됩니다. -->
+<script type="text/markdown"
+  data-id="2026-06-02-risk-watchlist-2-binance-futures"
+  data-title="리스크 워치리스트 #2 — Binance Futures 고위험 스크리닝"
+  data-date="2026-06-02"
+  data-tags="워치리스트,BinanceFutures,언락,저유통고FDV,PUMP,WLD,ZRO">
+# 리스크 워치리스트 #2 — Binance Futures 고위험 스크리닝
+
+**기준일 2026-06-02** · 대상: **바이낸스 선물(USDⓈ-M 무기한) 상장 종목** · 방식: 100점 프레임워크를 **D(토크노믹스)·A(집중·저유통)·E(유동성·레버리지)** 에 가중해 스크리닝 → 고위험만 추출.
+
+> ⚠️ **성격:** 리스크 진단·회피용. 투자 권유·사기 단정 아님. BF 상장 종목은 대부분 '러그'가 아니라 **공급형·구조형·청산형** 위험(대형 거래소 상장도 OM/Mantra -90% 사례 있음). 점수는 공개 데이터 기반 추정, %·날짜는 트래커 기준 변동 가능.
+>
+> **방법 한계(투명):** BF 전 종목(~400+)을 일일이 감사한 게 아니라, **대규모로 검증 가능한 고신호 기준**(임박 대형 언락·극단 저유통/고FDV·약세 기술·상폐 리스크)으로 걸러 최악을 추렸습니다. **당신은 타이핑할 필요 없이 이 리스트만 보면 됩니다.**
+
+## 0. 바이낸스 알트 = 약세 베이스
+- BF 알트 **5%만 200일선 위**, **38%가 ATL 부근**, 알트 거래량 -80%(2025.10 대비) → 반등 흡수력 약함, 공급충격·청산이 더 깊게 박힘.
+- BF 고유 리스크: **상폐/Alpha 제거 발표 → 단기 -20~80%**(최근 FST·FUN·MDT·FIO·IDEX). 저유동성·약펀더 소형 BF 알트가 후보군.
+
+## 1. 🔴 종합 고위험 리스트 (위험순)
+| # | 종목 | 1차 위험 | 촉매·근거 | 추정 |
+|---|------|----------|-----------|------|
+| 1 | **PUMP** (Pump.fun) | 언락+생태계 | **7/12 ~23.3% 클리프** + pump.fun(밈 98.6% 러그) 연관·저유통 | ~50 🟠 |
+| 2 | **WLD** (Worldcoin) | 극단 저유통/고FDV | **시총/FDV ≈ 0.02**(FDV ~50배), 2028까지 대량 점진 언락 | ~48 🟠 |
+| 3 | **ZRO** (LayerZero) | 임박 대형 언락 | **6/20 ~22.1% 클리프**, 인사이더(Strategic+Core) 비중 큼 | ~32 🟡↑ |
+| 4 | **STRK** (Starknet) | 저유통/고FDV+L2 | 시총/FDV ≈ 0.07, 과거 -51%, L2 오버행 | ~38 🟠 |
+| 5 | **SAND** (Sandbox) | 언락 | **8월 17.19%** 유통 해제 | ~32 🟡 |
+| 6 | **SAGA** | 저유통/고FDV | 시총/FDV ≈ 0.09 | ~33 🟡 |
+| 7 | **HUMA** | 언락(완화) | 26.5% 헤드라인이나 투자자분 11/26 연기 → 단기 완화 | ~24 🟡 |
+| 8 | **OPN / RED** | 임박 언락 | 6/5·6/6 각 ~10.9%(수일 내) | ~28 🟡 |
+| 9 | **SAHARA** (Sahara AI) | 언락(신규) | 6월 ~9.58%, 신규·저유통 | ~30 🟡 |
+| 10 | **ENA** (Ethena) | 발행 오버행 | 대규모 emission/언락 누적 부담 | ~30 🟡 |
+
+**추가 감시(만성):** ARB 0.9%/월 · APT 0.68%/월 = 'L2 오버행' 지속 슬로우-블리드 / SUI 7/1 대형 반복.
+
+## 2. ⚪ 헤드라인 함정 — 위험해 보이나 실제 낮음 (거르세요)
+- **HYPE** — 언락 $684M(달러 1위)지만 유통 대비 **~2.5%**, 언락 90% 축소 → **낮음.**
+- **NIL** — 대형 클리프 **5월말 이미 통과** → 선행 위험 낮음.
+- **AVAX**(8월 2.76%) · **APT/ARB**(월 0.7~0.9%) — 큰 이름이나 회당 희석 작음(누적은 부담).
+
+> 위험 = 달러 규모 ❌ → **유통 대비 % × 타이밍 × 흡수 수요 × 레버리지** ⭕
+
+## 3. 최상위 2종 채점 상세 (투명 공개)
+- **PUMP:** D 7/12 대형클리프(+8)·저유통/고FDV(+4) · A 인사이더 집중(+7) · E 밈 변동성·약세 유동성(+5) · B·C 런치패드 리스크 일부 → **~48–55 🟠**. 언락+생태계 **이중 리스크**로 이번 리스트 최상위.
+- **WLD:** A float<15%(+6)·시총/FDV 극단 저유통 · D 향후 대량 언락(+8)·FDV≫시총(+4) · E 약세(+4) → **~45–50 🟠**. 만성 희석의 교과서.
+
+## 4. 실전 활용 & 트랙레코드
+- 언락 **D-7 ~ D+3** 변동성·하방 집중. 주말·저유동성 강제청산 취약. 보유 시 해당일 전 점검, 신규 진입은 직전 회피. (회피·타이밍 관점 — 매매 자문 아님)
+- **다음 #3에서 검증:** PUMP(7/12)·ZRO(6/20)·OPN(6/5)·RED(6/6) 언락 전후 7일 수익률, WLD·STRK 추세, HYPE/NIL(저위험 판정) 적중 여부.
+
+---
+
+*데이터: CryptoRank·Tokenomist·KuCoin·CoinGecko Research·BeInCrypto·blockchainreporter·CoinDesk(6/2 매크로). BF 상장 여부·%·날짜는 트래커/거래소 기준이며 변동 가능. 추정 점수는 공개 데이터 기반 분석가 판단.*
+</script>
+
 <script type="text/markdown"
   data-id="2026-06-02-risk-watchlist-1"
   data-title="리스크 워치리스트 #1 — 임박 언락·구조적 고위험"
